@@ -1,0 +1,4 @@
+name: MyFirstPlugin
+version: '${project.version}'
+main: myfirstplugin.myfirstplugin.MyFirstPlugin
+api-version: 1.18
