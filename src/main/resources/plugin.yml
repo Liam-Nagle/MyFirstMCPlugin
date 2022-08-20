@@ -1,0 +1,6 @@
+name: MyFirstMCPlugin
+version: '${project.version}'
+main: myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin
+api-version: 1.18
+authors: [ LiamNagle ]
+description: My First MC Plugin
