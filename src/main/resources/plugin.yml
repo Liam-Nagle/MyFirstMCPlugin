@@ -4,3 +4,9 @@ main: myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin
 api-version: 1.18
 authors: [ LiamNagle ]
 description: My First MC Plugin
+
+commands:
+  ce:
+    description: The custom enchant command
+    permission-message: You do not have permission to use this command
+    usage: "Usage /ce [enchantName] [enchantLevel]"

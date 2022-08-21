@@ -8,6 +8,7 @@ package myfirstmcplugin.myfirstmcplugin.handlers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin;
 import org.bukkit.Bukkit;
@@ -36,17 +37,25 @@ public class BlockHandler implements Listener {
         event.setDropItems(false);
         player = event.getPlayer();
         BreakDirection direction = BlockHandler.BreakDirection.getFacingDirection(player);
-        if(CheckEnchant("Explosive", event)) {
-            int enchantLevel = player.getInventory().getItemInMainHand().getItemMeta().getEnchantLevel(CustomEnchants.enchants.get("Explosive"));
-            if(enchantLevel >= 1000) {
-                ExplosiveEnchant(direction,event, 20, 20 );
-            } else if (enchantLevel >= 500) {
-                ExplosiveEnchant(direction,event, 10, 10 );
-            } else if (enchantLevel >= 100) {
-                ExplosiveEnchant(direction,event, 5, 5);
-            } else if (enchantLevel == 0) {
-                return;
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 10000 + 1);
+        int enchantLevel = player.getInventory().getItemInMainHand().getItemMeta().getEnchantLevel(CustomEnchants.enchants.get("Explosive"));
+        double enchantChance = (double)enchantLevel/(double)20000; //this makes enchants 0.5% per 100 lvls. (20000)
+        Bukkit.broadcastMessage(String.valueOf(randomNum));
+        if(isBetween(randomNum, 0, (int)(enchantChance*10000))) {
+            if(CheckEnchant("Explosive", event)) {
+                if(enchantLevel >= 1000) {
+                    ExplosiveEnchant(direction,event, 20, 20 );
+                } else if (enchantLevel >= 500) {
+                    ExplosiveEnchant(direction,event, 10, 10 );
+                } else if (enchantLevel >= 100) {
+                    ExplosiveEnchant(direction,event, 5, 5);
+                } else if (enchantLevel == 0) {
+                    return;
+                }
             }
+        }
+        if(isBetween(randomNum, 501, (int)(enchantChance*10000)+501)) {
+            Bukkit.broadcastMessage("JACKHAMMER PROC");
         }
     }
 
@@ -140,5 +149,9 @@ public class BlockHandler implements Listener {
         if(event.getBlock().getState() instanceof Container)
             return false; //If the player is in a container. Chest etc
         return true;
+    }
+
+    public static boolean isBetween(int x, int lower, int upper) {
+        return lower <= x && x <= upper;
     }
 }

@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ce implements CommandExecutor {
@@ -28,6 +29,9 @@ public class ce implements CommandExecutor {
               ItemStack item = player.getInventory().getItemInMainHand();
               if(item.getType().equals(Material.DIAMOND_PICKAXE)) {
                   ItemMeta meta = item.getItemMeta();
+                  if(meta.hasLore())
+                      for(String l : meta.getLore())
+                          lore.add(l);
                   if(CustomEnchants.enchants.get(enchantName).getMaxLevel() < enchantLvl) {
                       throw new EnchantLevelException();
                   }
@@ -38,7 +42,11 @@ public class ce implements CommandExecutor {
                           item.removeEnchantment(CustomEnchants.enchants.get(enchantName));
                           item.addUnsafeEnchantment(CustomEnchants.enchants.get(enchantName), enchantLvl);
                           meta = item.getItemMeta();
-                          lore.remove(ChatColor.GRAY + enchantName + " " + enchantLvl);
+                          for(int i = 0; i<lore.size();i++) {
+                              if(lore.get(i).contains(enchantName)) {
+                                  lore.remove(i);
+                              }
+                          }
                           lore.add(ChatColor.GRAY + enchantName + " " + enchantLvl);
                           meta.setLore(lore);
                           item.setItemMeta(meta);
@@ -47,9 +55,6 @@ public class ce implements CommandExecutor {
                       item.addUnsafeEnchantment(CustomEnchants.enchants.get(enchantName), enchantLvl);
                       meta = item.getItemMeta();
                       lore.add(ChatColor.GRAY + enchantName + " " + enchantLvl);
-                      if(meta.hasLore())
-                          for(String l : meta.getLore())
-                              lore.add(l);
                       meta.setLore(lore);
                       item.setItemMeta(meta);
                   }
