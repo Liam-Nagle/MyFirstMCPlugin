@@ -11,9 +11,12 @@ import java.util.List;
 
 import myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Container;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,11 +34,20 @@ public class BlockHandler implements Listener {
     @EventHandler
     public void onBlockBreak_Lowest(BlockBreakEvent event) {
         event.setDropItems(false);
-        this.player = event.getPlayer();
-        BreakDirection direction = BlockHandler.BreakDirection.getFacingDirection(this.player);
-        if(this.player.getInventory().getItemInMainHand().getType().equals(Material.DIAMOND_PICKAXE)) {
-            ExplosiveEnchant(direction, event);
+        player = event.getPlayer();
+        BreakDirection direction = BlockHandler.BreakDirection.getFacingDirection(player);
+        if(CheckEnchant("Explosive", event)) {
+            int enchantLevel = player.getInventory().getItemInMainHand().getItemMeta().getEnchantLevel(CustomEnchants.enchants.get("Explosive"));
+            if(enchantLevel >= 1000) {
+                ExplosiveEnchant(direction,event, 20, 20 );
+            } else if (enchantLevel >= 500) {
+                ExplosiveEnchant(direction,event, 10, 10 );
+            } else if (enchantLevel >= 100) {
+                ExplosiveEnchant(direction,event, 5, 5);
+            } else if (enchantLevel == 0) {
+                return;
             }
+        }
     }
 
     public static enum BreakDirection {
@@ -92,8 +104,8 @@ public class BlockHandler implements Listener {
             return result;
         }
     }
-    public void ExplosiveEnchant(BreakDirection direction, BlockBreakEvent event) {
-        List<Location> blocks = direction.generateSphere(event.getBlock(), 5, 3);
+    public void ExplosiveEnchant(BreakDirection direction, BlockBreakEvent event, int radius, int radiusDown) {
+        List<Location> blocks = direction.generateSphere(event.getBlock(), radius, radiusDown);
         int blocksDestroyed = DestroyBlocks(blocks, event.getPlayer());
         Bukkit.broadcastMessage("Explosive Proc'd: " + blocksDestroyed);
     }
@@ -112,5 +124,21 @@ public class BlockHandler implements Listener {
             }
         }
         return blocksDestroyed;
+    }
+
+    public boolean CheckEnchant(String enchant, BlockBreakEvent event) {
+        if(player.getInventory().getItemInMainHand() == null)
+            return false; //Checks if player has item in main hand
+        if(!player.getInventory().getItemInMainHand().hasItemMeta())
+            return false; //If item in main hand doesn't have item meta
+        if(!player.getInventory().getItemInMainHand().getItemMeta().hasEnchant(CustomEnchants.enchants.get(enchant)))
+            return false; //If the player doesn't have the enchant
+        //if(player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)
+            //return false; //If player is in Creative or Spectator
+        //if(player.getInventory().firstEmpty() == -1)
+        //    return false; //If player inventory is full so no need to send blocks
+        if(event.getBlock().getState() instanceof Container)
+            return false; //If the player is in a container. Chest etc
+        return true;
     }
 }

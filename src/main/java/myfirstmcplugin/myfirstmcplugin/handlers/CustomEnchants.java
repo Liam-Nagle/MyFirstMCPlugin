@@ -3,22 +3,22 @@ package myfirstmcplugin.myfirstmcplugin.handlers;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 
+import java.beans.EventHandler;
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CustomEnchants {
-    public Enchantment enchant;
 
-    public CustomEnchants(String namespace, String name, int maxLvl) {
-        enchant = new EnchantHandler(namespace, name, maxLvl);
-        register(enchant);
-    }
-
-    public static void register(Enchantment enchant) {
-        boolean registered = Arrays.stream(Enchantment.values()).collect(Collectors.toList()).contains(enchant);
-        if(!registered) {
-            registerEnchantment(enchant);
+   public static Map<String, EnchantHandler> enchants = new HashMap<String, EnchantHandler>();
+    public static void register() {
+        enchants.put("Explosive", new EnchantHandler("explosive", "Explosive", 1000));
+        enchants.put("Jackhammer", new EnchantHandler("jackhammer", "Jackhammer", 1000));
+        for (Enchantment enchant: enchants.values()) {
+            boolean registered = Arrays.stream(Enchantment.values()).collect(Collectors.toList()).contains(enchant);
+            if(!registered) {
+                registerEnchantment(enchant);
+            }
         }
     }
 
