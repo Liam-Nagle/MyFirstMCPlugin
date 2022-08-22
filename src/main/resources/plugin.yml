@@ -9,4 +9,8 @@ commands:
   ce:
     description: The custom enchant command
     permission-message: You do not have permission to use this command
-    usage: "Usage /ce [enchantName] [enchantLevel]"
+    usage: "Usage /ce enchantName enchantLevel"
+  storage:
+    description: Everything to do with custom storage
+    permission-message: You do not have permission to use this command
+    usage: /<command> <delete>

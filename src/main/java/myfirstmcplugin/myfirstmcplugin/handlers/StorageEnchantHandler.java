@@ -5,15 +5,16 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class EnchantHandler extends Enchantment {
-
+public class StorageEnchantHandler extends Enchantment {
     private final String name;
     private final int maxLvl;
-    public EnchantHandler(String namespace, String name, int lvl) {
-        super(NamespacedKey.minecraft(namespace));
-        this.name = name;
-        this.maxLvl = lvl;
+
+    public StorageEnchantHandler(String namespace, String name, int lvl) {
+            super(NamespacedKey.minecraft(namespace));
+            this.name = name;
+            this.maxLvl = lvl;
     }
+
 
     @Override
     public String getName() {
