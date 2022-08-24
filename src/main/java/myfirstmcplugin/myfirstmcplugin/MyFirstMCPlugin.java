@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -25,7 +27,6 @@ public final class MyFirstMCPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.getLogger().info("Starting up LiamsFirstPlugin");
-
         //Handlers
 
         new BlockHandler(this);
@@ -40,7 +41,6 @@ public final class MyFirstMCPlugin extends JavaPlugin {
         //Other
 
         CustomEnchants.register();
-        new BlockHandler(this);
     }
 
     @Override

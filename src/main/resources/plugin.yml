@@ -13,4 +13,4 @@ commands:
   storage:
     description: Everything to do with custom storage
     permission-message: You do not have permission to use this command
-    usage: /<command> <delete>
+    usage: /<command> <delete | capacity>

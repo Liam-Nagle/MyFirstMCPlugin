@@ -5,16 +5,11 @@
 
 package myfirstmcplugin.myfirstmcplugin.handlers;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
@@ -23,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 public class BlockHandler implements Listener {
@@ -40,7 +36,7 @@ public class BlockHandler implements Listener {
         int randomNum = ThreadLocalRandom.current().nextInt(0, 10000 + 1);
         int enchantLevel = player.getInventory().getItemInMainHand().getItemMeta().getEnchantLevel(CustomEnchants.enchants.get("Explosive"));
         double enchantChance = (double)enchantLevel/(double)20000; //this makes enchants 0.5% per 100 lvls. (20000)
-        Bukkit.broadcastMessage(String.valueOf(randomNum));
+        DestroyBlocks(event.getBlock().getLocation(), player);
         if(isBetween(randomNum, 0, (int)(enchantChance*10000))) {
             if(CheckEnchant("Explosive", event)) {
                 if(enchantLevel >= 1000) {
@@ -122,16 +118,32 @@ public class BlockHandler implements Listener {
     public int DestroyBlocks(List<Location> blocks, Player player) {
         Iterator var6 = blocks.iterator();
         int blocksDestroyed = 0;
+        HashMap<Material, Integer> items = new HashMap<>();
         while (var6.hasNext()) {
             Location location = (Location) var6.next();
             Block block = location.getBlock();
             Material material = location.getBlock().getType();
             if (block.getType() != Material.BEDROCK && block.getType() != Material.AIR && !block.isLiquid()) {
                 location.getBlock().setType(Material.AIR);
-                player.getInventory().addItem(new ItemStack[]{new ItemStack(material, 1)});
+                items.merge(material, 1, Integer::sum);
                 blocksDestroyed++;
             }
         }
+        UpdateStorageBlocks(player.getInventory().getItem(9), items);
+        return blocksDestroyed;
+    }
+
+    public int DestroyBlocks(Location location, Player player) {
+        int blocksDestroyed = 0;
+        HashMap<Material, Integer> items = new HashMap<>();
+        Block block = location.getBlock();
+        Material material = location.getBlock().getType();
+            if (block.getType() != Material.BEDROCK && block.getType() != Material.AIR && !block.isLiquid()) {
+                location.getBlock().setType(Material.AIR);
+                items.merge(material, 1, Integer::sum);
+                blocksDestroyed++;
+            }
+        UpdateStorageBlocks(player.getInventory().getItem(9), items);
         return blocksDestroyed;
     }
 
@@ -153,5 +165,32 @@ public class BlockHandler implements Listener {
 
     public static boolean isBetween(int x, int lower, int upper) {
         return lower <= x && x <= upper;
+    }
+    
+    private void UpdateStorageBlocks(ItemStack storage, HashMap<Material, Integer> items) {
+        ItemMeta meta = storage.getItemMeta();
+        ArrayList<String> lore = new ArrayList<String>();
+        HashMap<Material, Integer> oldItems = new HashMap<>();
+        if(meta.hasLore())
+            for(String l : meta.getLore())
+                lore.add(l);
+        int totalValue = 0;
+        int maxCapacity = storage.getItemMeta().getEnchantLevel(CustomEnchants.enchants.get("Capacity"));
+        for (Map.Entry<Material, Integer> entry : items.entrySet()) {
+            Material key = entry.getKey();
+            String updatedKey = key.name().replaceAll("_", " ").substring(0,1).toUpperCase() + key.name().replaceAll("_", " ").substring(1).toLowerCase();
+            Integer value = entry.getValue();
+            for(int i = 0; i<lore.size();i++) {
+                if(lore.get(i).contains(updatedKey)) {
+                    oldItems.put(key, Integer.parseInt(lore.get(i).replaceAll("[^0-9?!\\\\.]","")));
+                    lore.remove(i);
+                }
+            }
+            Integer updatedValue = oldItems.getOrDefault(key, 0) + value;
+            updatedKey = key.name().replaceAll("_", " ").substring(0,1).toUpperCase() + key.name().replaceAll("_", " ").substring(1).toLowerCase();
+            lore.add(ChatColor.YELLOW.toString() + ChatColor.BOLD + "| " + ChatColor.WHITE + updatedKey + " " + String.valueOf(updatedValue));
+            meta.setLore(lore);
+            storage.setItemMeta(meta);
+        }
     }
 }
