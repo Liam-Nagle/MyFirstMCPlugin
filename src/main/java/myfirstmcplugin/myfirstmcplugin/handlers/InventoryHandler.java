@@ -22,41 +22,42 @@ public class InventoryHandler implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        int[] lockedSlots = {0, 9};
+        StorageGUI gui = new StorageGUI();
+        //Stops player from moving certain items in their inventory
+        int[] lockedSlots = {36, 9};
+
+        if(event.getClickedInventory() == null || event.getCurrentItem().getItemMeta() == null) {
+            return;
+        }
+
         if(ArrayUtils.contains(lockedSlots, event.getRawSlot()) && event.isLeftClick()) {
+            Bukkit.broadcastMessage("Locked Slots");
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You can't move this item");
         }
 
-        if(event.getInventory().getHolder() instanceof StorageGUI) {
-            event.setCancelled(true);
-
-            ItemStack clickedItem = event.getCurrentItem();
-
-            // verify current item is not null
-            if (clickedItem == null || clickedItem.getType().isAir()) return;
-
-            Player p = (Player) event.getWhoClicked();
-
-            // Using slots click is a best option for your inventory click's
-            p.sendMessage("You clicked at slot " + event.getRawSlot());
-        }
-
-        if(event.getCurrentItem().getItemMeta().getDisplayName() == "Storage" && event.isRightClick()); {
-            StorageGUI gui = new StorageGUI();
+        //Opens storageGUI if player right clicks storage.
+        if(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Storage") && event.isRightClick()) {
+            Bukkit.broadcastMessage("Opens GUI");
             player.openInventory(gui.getInventory());
+        }
+
+        //Stops player from moving items within StorageGUI
+        if(ChatColor.stripColor(event.getView().getTitle()).equalsIgnoreCase("Storage")) {
+            Bukkit.broadcastMessage("GUI Instance");
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
         Player player = (Player) event.getWhoClicked();
-        int[] lockedSlots = {0, 9};
+        //Stops player from moving certain items in their inventory
+        int[] lockedSlots = {36, 9};
         if(event.getRawSlots().contains(lockedSlots)) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "You can't move this item");
         }
 
+        //Stops player from moving items within StorageGUI
         if(event.getInventory().getHolder() instanceof StorageGUI) {
                 event.setCancelled(true);
         }

@@ -28,7 +28,7 @@ public class StorageGUI implements InventoryHolder {
 
     private void initaliseItems() {
         for(int i = 0; i < inv.getSize(); i++) {
-            inv.addItem(createGuiItem(Material.GRAY_STAINED_GLASS));
+            inv.setItem(i, createGuiItem(Material.GRAY_STAINED_GLASS));
         }
     }
 
