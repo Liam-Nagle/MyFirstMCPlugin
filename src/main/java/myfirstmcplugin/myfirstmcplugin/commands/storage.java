@@ -1,6 +1,6 @@
 package myfirstmcplugin.myfirstmcplugin.commands;
 
-import myfirstmcplugin.myfirstmcplugin.handlers.CustomEnchants;
+import myfirstmcplugin.myfirstmcplugin.CustomClasses.CustomEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -25,35 +25,32 @@ public class storage implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("Clear")) {
-                ItemStack item = player.getInventory().getItem(9);
-                ItemMeta meta =  item.getItemMeta();
-                ArrayList<String> lore = new ArrayList<String>();
-                lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Enchants");
-                lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "| " + ChatColor.WHITE + "Capacity " + "1");
-                lore.add("\n");
-                lore.add(ChatColor.YELLOW.toString() + ChatColor.BOLD + "Blocks");
-                meta.setLore(lore);
-                meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Storage");
-                item.setItemMeta(meta);
+                createStorage();
                 return true;
             }
             if(args[0].equalsIgnoreCase("Give")) {
                 if(args.length > 1) {
-                    ItemStack item = new ItemStack(Material.CHEST);
-                    item.addUnsafeEnchantment(CustomEnchants.enchants.get("Capacity"), 1);
-                    ItemMeta meta = item.getItemMeta();
-                    ArrayList<String> lore = new ArrayList<String>();
-                    lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Enchants");
-                    lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "| " + ChatColor.WHITE + "Capacity " + "1");
-                    lore.add("\n");
-                    lore.add(ChatColor.YELLOW.toString() + ChatColor.BOLD + "Blocks");
-                    meta.setLore(lore);
-                    meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Storage");
-                    item.setItemMeta(meta);
-                    player.getServer().getPlayer(args[1]).getInventory().setItem(9, item);
+                    player.getServer().getPlayer(args[1]).getInventory().setItem(9, createStorage());
                 }
             }
         }
         return true;
+    }
+
+
+    private ItemStack createStorage() {
+        ItemStack item = new ItemStack(Material.CHEST);
+        item.addUnsafeEnchantment(CustomEnchants.enchants.get("Capacity"), 1);
+        ItemMeta meta = item.getItemMeta();
+        ArrayList<String> lore = new ArrayList<String>();
+        lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "Enchants");
+        lore.add(ChatColor.DARK_RED.toString() + ChatColor.BOLD + "| " + ChatColor.WHITE + "Capacity " + "1");
+        lore.add("\n");
+        lore.add(ChatColor.YELLOW.toString() + ChatColor.BOLD + "Blocks");
+        meta.setLore(lore);
+        meta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Storage");
+        meta.setCustomModelData(1002);
+        item.setItemMeta(meta);
+        return item;
     }
 }

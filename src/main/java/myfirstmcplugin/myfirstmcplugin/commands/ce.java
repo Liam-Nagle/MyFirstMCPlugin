@@ -1,8 +1,7 @@
 package myfirstmcplugin.myfirstmcplugin.commands;
 
 import myfirstmcplugin.myfirstmcplugin.exceptions.EnchantLevelException;
-import myfirstmcplugin.myfirstmcplugin.handlers.CustomEnchants;
-import org.bukkit.Bukkit;
+import myfirstmcplugin.myfirstmcplugin.CustomClasses.CustomEnchants;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -13,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ce implements CommandExecutor {

@@ -1,15 +1,15 @@
-package myfirstmcplugin.myfirstmcplugin.handlers;
+package myfirstmcplugin.myfirstmcplugin.CustomClasses;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class StorageEnchantHandler extends Enchantment {
+public class StorageEnchants extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public StorageEnchantHandler(String namespace, String name, int lvl) {
+    public StorageEnchants(String namespace, String name, int lvl) {
             super(NamespacedKey.minecraft(namespace));
             this.name = name;
             this.maxLvl = lvl;

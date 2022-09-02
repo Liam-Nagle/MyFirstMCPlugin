@@ -8,11 +8,11 @@ package myfirstmcplugin.myfirstmcplugin.handlers;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+import myfirstmcplugin.myfirstmcplugin.CustomClasses.CustomEnchants;
 import myfirstmcplugin.myfirstmcplugin.MyFirstMCPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

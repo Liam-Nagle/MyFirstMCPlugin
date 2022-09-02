@@ -1,15 +1,15 @@
-package myfirstmcplugin.myfirstmcplugin.handlers;
+package myfirstmcplugin.myfirstmcplugin.CustomClasses;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class PickaxeEnchantHandler extends Enchantment {
+public class PickaxeEnchants extends Enchantment {
 
     private final String name;
     private final int maxLvl;
-    public PickaxeEnchantHandler(String namespace, String name, int lvl) {
+    public PickaxeEnchants(String namespace, String name, int lvl) {
         super(NamespacedKey.minecraft(namespace));
         this.name = name;
         this.maxLvl = lvl;

@@ -1,4 +1,4 @@
-package myfirstmcplugin.myfirstmcplugin.handlers;
+package myfirstmcplugin.myfirstmcplugin.CustomClasses;
 
 import org.bukkit.enchantments.Enchantment;
 
@@ -10,9 +10,9 @@ public class CustomEnchants {
 
    public static Map<String, Enchantment> enchants = new HashMap<String, Enchantment>();
     public static void register() {
-        enchants.put("Explosive", new PickaxeEnchantHandler("explosive", "Explosive", 1000));
-        enchants.put("Jackhammer", new PickaxeEnchantHandler("jackhammer", "Jackhammer", 1000));
-        enchants.put("Capacity", new StorageEnchantHandler("capacity", "Capacity", 10000000));
+        enchants.put("Explosive", new PickaxeEnchants("explosive", "Explosive", 1000));
+        enchants.put("Jackhammer", new PickaxeEnchants("jackhammer", "Jackhammer", 1000));
+        enchants.put("Capacity", new StorageEnchants("capacity", "Capacity", 10000000));
         for (Enchantment enchant: enchants.values()) {
             boolean registered = Arrays.stream(Enchantment.values()).collect(Collectors.toList()).contains(enchant);
             if(!registered) {

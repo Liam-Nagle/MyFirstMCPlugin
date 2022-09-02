@@ -36,7 +36,7 @@ public class InventoryHandler implements Listener {
         }
 
         //Opens storageGUI if player right clicks storage.
-        if(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Storage") && event.isRightClick()) {
+        if(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Storage") && event.isRightClick()) { //This should be switch to check CustomModelDataNumber
             Bukkit.broadcastMessage("Opens GUI");
             player.openInventory(gui.getInventory());
         }
